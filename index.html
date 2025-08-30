@@ -1,0 +1,189 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gift Photo Editing - Transform Your Moments</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom styles for hover effects and animations */
+    .hover-scale { transition: transform 0.3s; }
+    .hover-scale:hover { transform: scale(1.05); }
+    .fade-in { opacity: 0; animation: fadeIn 1s forwards; }
+    @keyframes fadeIn { to { opacity: 1; } }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Navigation -->
+  <nav class="bg-teal-600 text-white p-4 sticky top-0 z-10">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Gift Photo Editing</h1>
+      <div class="space-x-4">
+        <a href="#home" class="hover:underline">Home</a>
+        <a href="#services" class="hover:underline">Services</a>
+        <a href="#portfolio" class="hover:underline">Portfolio</a>
+        <a href="#testimonials" class="hover:underline">Testimonials</a>
+        <a href="#contact" class="hover:underline">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="bg-teal-500 text-white py-20 text-center">
+    <div class="container mx-auto">
+      <h2 class="text-4xl md:text-5xl font-bold mb-4 fade-in">Transform Your Photos into Stunning Gifts</h2>
+      <p class="text-lg md:text-xl mb-6 fade-in" style="animation-delay: 0.2s;">
+        With 8 years of expertise and thousands of hours perfecting photo editing, I turn your raw photos into breathtaking keepsakes.
+      </p>
+      <a href="#contact" class="bg-white text-teal-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-200 hover-scale">Get Started</a>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="py-16">
+    <div class="container mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-8 fade-in">Our Services</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+        <div class="bg-white p-6 rounded-lg shadow-lg hover-scale fade-in" style="animation-delay: 0.3s;">
+          <h3 class="text-xl font-semibold mb-4">Photo Enhancement</h3>
+          <p>Adjust lighting, colors, and contrast to make your photos pop, perfect for turning casual shots into professional-grade images.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg hover-scale fade-in" style="animation-delay: 0.4s;">
+          <h3 class="text-xl font-semibold mb-4">Creative Edits</h3>
+          <p>Add artistic effects, backgrounds, or text to create unique, gift-ready images for prints, cards, or digital keepsakes.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg hover-scale fade-in" style="animation-delay: 0.5s;">
+          <h3 class="text-xl font-semibold mb-4">Photo Restoration</h3>
+          <p>Revive old or damaged photos, making them perfect for heartfelt gifts or family heirlooms.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio Section -->
+  <section id="portfolio" class="bg-gray-200 py-16">
+    <div class="container mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-8 fade-in">Portfolio</h2>
+      <p class="mb-8 fade-in" style="animation-delay: 0.2s;">See how I’ve transformed everyday photos into extraordinary gifts.</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+        <!-- Placeholder images; replace with your actual portfolio images -->
+        <div class="bg-white p-4 rounded-lg shadow-lg hover-scale fade-in" style="animation-delay: 0.3s;">
+          <img src="https://via.placeholder.com/300x200?text=Before+After" alt="Portfolio Image 1" class="w-full h-48 object-cover rounded">
+          <p class="mt-4">Enhanced family portrait for a custom canvas gift.</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-lg hover-scale fade-in" style="animation-delay: 0.4s;">
+          <img src="https://via.placeholder.com/300x200?text=Creative+Edit" alt="Portfolio Image 2" class="w-full h-48 object-cover rounded">
+          <p class="mt-4">Creative edit with artistic background for a birthday card.</p>
+        </div>
+        <div class="bg-white p-4 rounded-lg shadow-lg hover-scale fade-in" style="animation-delay: 0.5s;">
+          <img src="https://via.placeholder.com/300x200?text=Restoration" alt="Portfolio Image 3" class="w-full h-48 object-cover rounded">
+          <p class="mt-4">Restored vintage photo for a family reunion gift.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section id="testimonials" class="py-16">
+    <div class="container mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-8 fade-in">What Clients Say</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 px-4">
+        <div class="bg-white p-6 rounded-lg shadow-lg fade-in" style="animation-delay: 0.3s;">
+          <p class="italic">"My phone photos were okay, but after editing, they became stunning gifts! The process was so easy."</p>
+          <p class="mt-4 font-semibold">— Sarah M.</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg fade-in" style="animation-delay: 0.4s;">
+          <p class="italic">"I sent an old photo, and it came back looking brand new. Perfect for my mom’s birthday!"</p>
+          <p class="mt-4 font-semibold">— James T.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="bg-teal-500 text-white py-16 text-center">
+    <div class="container mx-auto">
+      <h2 class="text-3xl font-bold mb-8 fade-in">Get in Touch</h2>
+      <p class="mb-8 fade-in" style="animation-delay: 0.2s;">
+        Have photos you want to turn into amazing gifts? Contact me to discuss your project!
+      </p>
+      <button onclick="window.location.href='mailto:your.email@example.com?subject=Photo%20Editing%20Inquiry'"
+              class="bg-white text-teal-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-200 hover-scale">
+        Send Me Your Photos
+      </button>
+      <p class="mt-4 fade-in" style="animation-delay: 0.3s;">
+        Email: <a href="mailto:your.email@example.com" class="underline">your.email@example.com</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-4 text-center">
+    <p>&copy; 2025 Gift Photo Editing. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Add fade-in effect on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fade-in');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(element => {
+      observer.observe(element);
+    });
+  </script>
+</body>
+</html>
